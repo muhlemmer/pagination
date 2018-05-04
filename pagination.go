@@ -2,7 +2,6 @@ package pagination
 
 import (
 	"errors"
-	//"fmt"
 )
 
 type Entry struct {
@@ -97,7 +96,6 @@ func (p *Pagination) entries(a *Args) {
 		e.Active = e.Number == p.Page
 		p.Entries[i] = e
 	}
-	//fmt.Println(p.Entries)
 	return
 }
 
