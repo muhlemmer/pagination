@@ -110,13 +110,24 @@ func TestPagesError(t *testing.T) {
 
 type testParam struct {
 	a Args
-	r *Pagination
+	r testResult
 }
 
-var newTests = []testParam{
+type testResult struct {
+	Prev    int     // Previous page
+	Page    int     //Current page
+	Next    int     // Next page
+	Records int     //Current results
+	Total   int     //Total amount of records
+	Size    int     //Records per page
+	Pages   int     //Total amount of pages.
+	Entries []Entry //Entry range for template
+}
+
+var tests = []testParam{
 	{
 		a: Args{5, 3, 1, 10, 100, 10},
-		r: &Pagination{
+		r: testResult{
 			0, 1, 2, 10, 100, 10, 10,
 			[]Entry{
 				{true, 1},
@@ -129,7 +140,7 @@ var newTests = []testParam{
 	},
 	{
 		a: Args{5, 3, 10, 10, 100, 10},
-		r: &Pagination{
+		r: testResult{
 			9, 10, 0, 10, 100, 10, 10,
 			[]Entry{
 				{false, 6},
@@ -142,7 +153,7 @@ var newTests = []testParam{
 	},
 	{
 		a: Args{5, 3, 5, 10, 100, 10},
-		r: &Pagination{
+		r: testResult{
 			4, 5, 6, 10, 100, 10, 10,
 			[]Entry{
 				{false, 3},
@@ -155,7 +166,7 @@ var newTests = []testParam{
 	},
 	{
 		a: Args{5, 3, 0, 10, 100, 10},
-		r: &Pagination{
+		r: testResult{
 			0, 0, 1, 10, 100, 10, 10,
 			[]Entry{
 				{false, 1},
@@ -168,7 +179,7 @@ var newTests = []testParam{
 	},
 	{
 		a: Args{5, 3, 22, 30, 5000, 30},
-		r: &Pagination{
+		r: testResult{
 			21, 22, 23, 30, 5000, 30, 167,
 			[]Entry{
 				{false, 20},
@@ -181,7 +192,7 @@ var newTests = []testParam{
 	},
 	{
 		a: Args{5, 3, 9, 10, 100, 10},
-		r: &Pagination{
+		r: testResult{
 			8, 9, 10, 10, 100, 10, 10,
 			[]Entry{
 				{false, 6},
@@ -194,7 +205,7 @@ var newTests = []testParam{
 	},
 	{
 		a: Args{9, 3, 13, 27, 550, 27},
-		r: &Pagination{
+		r: testResult{
 			12, 13, 14, 27, 550, 27, 21,
 			[]Entry{
 				{false, 11},
@@ -211,33 +222,53 @@ var newTests = []testParam{
 	},
 }
 
-func TestNew(t *testing.T) {
-	for _, tp := range newTests {
+func Test(t *testing.T) {
+	for _, tp := range tests {
 		p, err := New(tp.a)
 		if err != nil {
-			t.Error(err.Error())
-			return
+			t.Error("New() for: ", tp.a, " Error: ", err.Error())
+			continue
 		}
 
-		fail := false
-		if tp.r.Prev != p.Prev || tp.r.Page != p.Page || tp.r.Next != p.Next || tp.r.Results != p.Results || tp.r.Records != p.Records || tp.r.Size != p.Size || tp.r.Pages != p.Pages {
-			fail = true
+		if p.Prev() != tp.r.Prev {
+			t.Error("Prev() for: ", tp.a, " Expected: ", tp.r.Prev, " Got: ", p.Prev())
 		}
-		if len(tp.r.Entries) == len(p.Entries) {
-			for k, e := range tp.r.Entries {
-				if e != p.Entries[k] {
-					fail = true
-				}
+
+		if p.Page() != tp.r.Page {
+			t.Error("Page() for: ", tp.a, " Expected: ", tp.r.Page, " Got: ", p.Page())
+		}
+
+		if p.Next() != tp.r.Next {
+			t.Error("Next() for: ", tp.a, " Expected: ", tp.r.Next, " Got: ", p.Next())
+		}
+
+		if p.Records() != tp.r.Records {
+			t.Error("Records() for: ", tp.a, " Expected: ", tp.r.Records, " Got: ", p.Records())
+		}
+
+		if p.Total() != tp.r.Total {
+			t.Error("Total() for: ", tp.a, " Expected: ", tp.r.Total, " Got: ", p.Total())
+		}
+
+		if p.Size() != tp.r.Size {
+			t.Error("Size() for: ", tp.a, " Expected: ", tp.r.Size, " Got: ", p.Size())
+		}
+
+		if p.Pages() != tp.r.Pages {
+			t.Error("Pages() for: ", tp.a, " Expected: ", tp.r.Pages, " Got: ", p.Pages())
+		}
+
+		entries := p.Entries()
+		if len(entries) != len(tp.r.Entries) {
+			t.Error("len(Entries()) for: ", tp.a, " Expected: ", len(tp.r.Entries), " Got: ", len(entries))
+			continue
+		}
+
+		for k, e := range entries {
+			if e != tp.r.Entries[k] {
+				t.Error("Entries() for ", tp.a, " Expected: ", tp.r.Entries, " Got: ", entries)
+				break
 			}
-		} else {
-			fail = true
-		}
-		if fail {
-			t.Error(
-				"\nTestNew for: ", tp.a,
-				"\nExpected:    ", tp.r,
-				"\nGot:         ", p,
-			)
 		}
 	}
 }
