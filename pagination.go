@@ -13,20 +13,9 @@ type Args struct {
 	Max     int //Maximum amount of pagination entries
 	Pos     int //Position of active page
 	Page    int //Current page
-	Results int //Current results
-	Records int //Total amount of records
+	Records int //Current results
+	Total   int //Total amount of records
 	Size    int //Records per page
-}
-
-type Pagination struct {
-	Prev    int
-	Page    int //Current page
-	Next    int
-	Results int     //Current results
-	Records int     //Total amount of records
-	Size    int     //Records per page
-	Pages   int     //Total amount of pages.
-	Entries []Entry //Entry range for template
 }
 
 const (
@@ -38,7 +27,7 @@ const (
 )
 
 func (a *Args) pages() (p int, err error) {
-	p = (a.Records-1)/a.Size + 1
+	p = (a.Total-1)/a.Size + 1
 	if a.Page > p {
 		err = errors.New(ErrPageNo)
 	}
@@ -50,79 +39,95 @@ func (a *Args) check() (err error) {
 		err = errors.New(errInvSize)
 		return
 	}
-	if a.Results > a.Size {
+	if a.Records > a.Size {
 		err = errors.New(errResultSize)
 		return
 	}
-	if a.Results > a.Records {
+	if a.Records > a.Total {
 		err = errors.New(errRecordSize)
 	}
 	return
 }
 
-func (p *Pagination) prev() {
-	if p.Page <= 1 {
-		return //p.Prev will remain 0
-	}
-	p.Prev = p.Page - 1
-	return
-}
-
-func (p *Pagination) next() {
-	if p.Page == p.Pages {
-		return //p.Next will remain 0
-	}
-	p.Next = p.Page + 1
-	return
-}
-
-func (p *Pagination) entries(a *Args) {
-	//sn is the start page number of the entries range
-	sn := p.Page - a.Pos //13 - 3 = 10
-	switch {
-	case sn < 0: //Don't show negative page numbers.
-		sn = 0
-		break
-	case a.Max-a.Pos+p.Page > p.Pages: //9-3+13 = 19 > 21 = false
-		sn = p.Pages - a.Max
-	}
-	sn++ //start with number 1
-
-	p.Entries = nil
-	p.Entries = make([]Entry, a.Max)
-	for i := 0; i < a.Max; i++ {
-		var e Entry
-		e.Number = sn + i
-		e.Active = e.Number == p.Page
-		p.Entries[i] = e
-	}
-	return
+type Pagination struct {
+	pages int
+	args  *Args
 }
 
 //Current page, No. results, Total no. records, Page size
-func New(a Args) (p *Pagination, err error) {
+func New(a Args) (pag *Pagination, err error) {
 	if err = a.check(); err != nil {
 		return
 	}
-	pages, err := a.pages()
+	p, err := a.pages()
 	if err != nil {
 		return
 	}
 
-	p = &Pagination{
-		Page:    a.Page,
-		Results: a.Results,
-		Records: a.Records,
-		Size:    a.Size,
-		Pages:   pages,
-	}
-	p.prev()
-	p.next()
-
 	//Determine the needed amount of entries
-	if pages < a.Max {
-		a.Max = pages
+	if p < a.Max {
+		a.Max = p
 	}
-	p.entries(&a)
+
+	pag = &Pagination{
+		pages: p,
+		args:  &a,
+	}
+	return
+}
+
+func (p *Pagination) Prev() int {
+	if p.args.Page <= 1 {
+		return 0
+	}
+	return p.args.Page - 1
+}
+
+func (p *Pagination) Page() int {
+	return p.args.Page
+}
+
+func (p *Pagination) Next() int {
+	if p.args.Page == p.pages {
+		return 0
+	}
+	return p.args.Page + 1
+}
+
+func (p *Pagination) Records() int {
+	return p.args.Records
+}
+
+func (p *Pagination) Total() int {
+	return p.args.Total
+}
+
+func (p *Pagination) Size() int {
+	return p.args.Size
+}
+
+func (p *Pagination) Pages() int {
+	return p.pages
+}
+
+func (p *Pagination) Entries() (r []Entry) {
+	//sn is the start page number of the entries range
+	sn := p.args.Page - p.args.Pos
+	switch {
+	case sn < 0: //Don't show negative page numbers.
+		sn = 0
+		break
+	case p.args.Max-p.args.Pos+p.args.Page > p.pages:
+		sn = p.pages - p.args.Max
+	}
+	sn++ //start with number 1
+
+	r = make([]Entry, p.args.Max)
+	for i := 0; i < p.args.Max; i++ {
+		var e Entry
+		e.Number = sn + i
+		e.Active = e.Number == p.args.Page
+		r[i] = e
+	}
 	return
 }
