@@ -1,0 +1,20 @@
+{{define "pagination"}}
+	<ul class="pagination">
+	{{- if eq .Prev 0}}
+		<li class="page-item disabled"><a class="page-link" >&lt;&lt;&nbsp;First</a></li>
+	{{- else}}
+		<li class="page-item"><a class="page-link" href=".">&lt;&lt;&nbsp;First</a></li>
+		<li class="page-item"><a class="page-link" rel="prev" href="?page={{.Prev}}">&lt;&nbsp;Previous</a></li>
+	{{end}}
+	{{- range .Entries}}
+		<li class="page-item{{if .Active}} active{{end}}"><a class="page-link" href="?page={{.Number}}">{{.Number}}</a></li>
+	{{- end}}
+	{{- if eq .Next 0}}
+		<li class="page-item disabled"><a class="page-link" >last&nbsp;&gt;&gt;</a></li>
+	{{- else}}
+		<li class="page-item"><a class="page-link" rel="next" href="?page={{.Next}}">Next&nbsp;&gt;</a></li>
+		<li class="page-item"><a class="page-link" href="/?page={{.Pages}}">Last&nbsp;&gt;&gt;</a></li>
+	{{- end}}
+	</ul>
+	<p>Page {{.Page}} of {{.Pages}}, showing {{.Records}} record(s) out of {{.Total}} total</p>
+{{end}}
