@@ -69,6 +69,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	//Here is where we start the pagination parsing
 	a := pagination.Args{
 		Max:     paginationMax,
 		Pos:     paginationPos,
