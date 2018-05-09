@@ -1,3 +1,7 @@
+// Copyright 2018 Tim Möhlmann. All rights reserved.
+// This project is licensed under the BSD 3-Clause
+// See the LICENSE file for details.
+
 package pagination
 
 import (
