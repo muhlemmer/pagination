@@ -9,7 +9,7 @@ import (
 	"github.com/muhlemmer/pagination"
 )
 
-type Page struct {
+type page struct {
 	Articles   []result
 	Pagination *pagination.Pagination
 }
