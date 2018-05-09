@@ -12,9 +12,10 @@ The exported methods of the *Pagination* type can be called directly from the te
 
 ### General
 - [ ] More real life testing
+- [ ] Document the example
 
 ### For version 0.1
-- [ ] Package summary documentation for godoc
+- [x] Package summary documentation for godoc
 - [ ] Travis-ci integration
 - [ ] Goreport card integration
 
