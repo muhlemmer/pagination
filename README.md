@@ -16,51 +16,48 @@ The exported methods of the *Pagination* type can be called directly from the te
 
 ## Getting Started
 
-Run ````go get github.com/muhlemmer/pagination````
+````Shell
+go get github.com/muhlemmer/pagination
+````
 
 ### Prerequisites
 
-This package has been developed with Go version 1.10. However, no extremely new features have been used, by best knowledge of the author. So it might work on older version as well.
+This package has been developed with Go version 1.10.1 However, no extremely new features have been used, by best knowledge of the author. So it might work on older version as well.
 
 ### Usage
 
-A working example can be found in the `example/` folder.
-
-----All content below this line has not yet been edited from the template.----
+A working example can be found in the `example/` folder. Godoc is still in progress and the link will be included here when done. In principle there are 4 simple steps:
+1. Import the library
+2. Create the `pagination.Args` object after you collect the necessary data from queries etc.
+3. Call `pagination.New(Args)` which will do a sanity check on the supplied data and return a pointer to a new pagination object.
+4. Pass the pointer to your template and call the methods from there.
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
+The test suite is provided in the `pagination_test.go` file.  The last range of tests are confirming stable output.
 
-### Break down into end to end tests
+Test file will be build and run by:
+````Shell
+go test
+````
 
-Explain what these tests test and why
+### Error testing
 
-```
-Give an example
-```
+The first range of tests are using bogus values to trigger all the errors in sanity checking. All the error test function start with `func TestErr*`
 
-### And coding style tests
+### Output testing
 
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
+The final test function tests against various data sets, to ensure predictable output. These test are done in the final `Test(T)` function.
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [Go](https://golang.org) – Version 1.10.1
+* [Bootstrap](http://getbootstrap.com/) - Used in the example template
+* [Lorem Ipsum](https://www.lipsum.com/) - Used as data in the example
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
+Feel free to send any *pull requests*. Please format your code with `gofmt` before doing so.
 
 ## Versioning
 
@@ -68,16 +65,14 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+* **Tim Möhlmann** - *Initial work* - [Muhlemmer](https://github.com/muhlemmer)
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/muhlemmer/pagination/contributors) who participated in this project.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the BSD 3-Clause - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc
+This is the authors first open sourced library ever written and was originally part of a small dedicated web application. Writing this software and its documentation was fun ;). Hopefully this will be useful for others out there and any improvements are more then welcome!
