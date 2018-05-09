@@ -1,18 +1,22 @@
 ﻿# Pagination
 Pagination is a small Go library for setting up a range with data for use in a html/template. Features:
 * Whenever possible, current page at a fixed offset. So that there is consistent placement among all pages. The offset is shifted at the beginning or end of the page range.
-* Max amount of pages to show, to be sure the pagination fits you template.
+* Max amount of pages to show, to be sure the pagination fits your template.
 * Convenience of all applicable numbers from the pagination object: no need to access all kind of data structures and arithmetic from inside the template
   * Next, Prev, Current methods.
-  * List statistics 
+  * Various statistics
 
 The exported methods of the *Pagination* type can be called directly from the template and aim to be guaranteed to run from the template. Sanity checks are done early, when creating the new *Pagination* object. Hence, no error should occur at template execution time. (No excessive testing has been done yet, this just reflects the project aim)
 
-## ToDo
-1. Package summary documentation for godoc
-2. Travis-ci integration
-3. Goreport card integration
-4. More real life testing
+## To do
+
+### General
+- [ ] More real life testing
+
+### For version 0.1
+- [ ] Package summary documentation for godoc
+- [ ] Travis-ci integration
+- [ ] Goreport card integration
 
 ## Getting Started
 
@@ -22,7 +26,7 @@ go get github.com/muhlemmer/pagination
 
 ### Prerequisites
 
-This package has been developed with Go version 1.10.1 However, no extremely new features have been used, by best knowledge of the author. So it might work on older version as well.
+This package has been developed with Go version 1.10.1 However, no recent added features have been used, by best knowledge of the author. So it might work on older version as well.
 
 ### Usage
 
@@ -30,7 +34,7 @@ A working example can be found in the `example/` folder. Godoc is still in progr
 1. Import the library
 2. Create the `pagination.Args` object after you collect the necessary data from queries etc.
 3. Call `pagination.New(Args)` which will do a sanity check on the supplied data and return a pointer to a new pagination object.
-4. Pass the pointer to your template and call the methods from there.
+4. Pass the pointer to your template and call the output methods from there.
 
 ## Running the tests
 
@@ -61,7 +65,7 @@ Feel free to send any *pull requests*. Please format your code with `gofmt` befo
 
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/muhlemmer/pagination/tags). 
 
 ## Authors
 
