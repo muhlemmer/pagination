@@ -1,5 +1,5 @@
 /*Package pagination provides a convenient way to set up a pagination range with data for use in a "html/template".
-It places the current page on a defined position (while preventing overflows). There is a maximum size of the pagination, to fit your template design when the result set grows. For convenience it provides all neccesary data, like next, prev and current page easily called from the pagination methods inside the template.
+It places the current page on a defined position (while preventing overflows). There is a maximum size of the pagination, to fit your template design when the result set grows. For convenience it provides all necessary data, like next, prev and current page easily called from the pagination methods inside the template.
 
 Usage:
 
@@ -15,7 +15,7 @@ Usage:
 Naturally, "Pos" should always be smaller than "Max".
 "Page" should always be smaller than (Total / Size = Pages), rounded up.
 "Records" can never be bigger than "Size" and "Total".
-"Records" is usually equal to Size, but can be smaller on the last page in practice. "Records" value is not used in any calculation and can be ommited if not needed in the template for example statistics.
+"Records" is usually equal to Size, but can be smaller on the last page in practice. "Records" value is not used in any calculation and can be omitted if not needed in the template for example statistics.
 
 All the constraints are checked during creation of the new pagination object:
 
@@ -29,7 +29,7 @@ All the constraints are checked during creation of the new pagination object:
 		return
 	}
 
-Now the Pagination object pointer can be incorperated in the data structure passed to a template
+Now the Pagination object pointer can be incorporated in the data structure passed to a template
 	view := Page{
 		Articles:   results,
 		Pagination: pag,
@@ -38,7 +38,7 @@ Now the Pagination object pointer can be incorperated in the data structure pass
 		//Do something
 		return
 	}
-Let's say you use a seperate template for pagination, you can call it from a layout template like:
+Let's say you use a separate template for pagination, you can call it from a layout template like:
 	{{template "pagination" .Pagination}}
 
 Finally, inside the pagination template simply call the methods where you need them. ".Entries" gives the actual pagination range. Every "Entry" has two fields, "Active" and "Number":
