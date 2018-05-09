@@ -1,4 +1,7 @@
-﻿# Pagination
+﻿[![Build Status](https://travis-ci.org/muhlemmer/pagination.svg?branch=master)](https://travis-ci.org/muhlemmer/pagination)
+[![Go Report Card](https://goreportcard.com/badge/github.com/muhlemmer/pagination)](https://goreportcard.com/report/github.com/muhlemmer/pagination)
+[![GoDoc](https://godoc.org/github.com/muhlemmer/pagination?status.svg)](https://godoc.org/github.com/muhlemmer/pagination)
+# Pagination
 Pagination is a small Go library for setting up a range with data for use in a *html/template*. Features:
 * Whenever possible, current page at a defined position. So that there is consistent placement among all pages. The offset is shifted at the beginning or end of the page range.
 * Max amount of pages to show, to be sure the pagination fits your template.
@@ -16,8 +19,8 @@ The exported methods of the *Pagination* type can be called directly from the te
 
 ### For version 0.1
 - [x] Package summary documentation for godoc
-- [ ] Travis-ci integration
-- [ ] Goreport card integration
+- [x] Travis-ci integration
+- [x] Goreport card integration
 
 ## Getting Started
 
