@@ -91,7 +91,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	view := Page{
+	view := page{
 		Articles:   results,
 		Pagination: pag,
 	}
