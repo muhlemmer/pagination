@@ -1,22 +1,28 @@
+// Copyright 2018 Tim Möhlmann. All rights reserved.
+// This project is licensed under the BSD 3-Clause
+// See the LICENSE file for details.
+
 package pagination
 
 import (
 	"errors"
 )
 
+//Args contains the arguments for constructing a New pagination object.
 type Args struct {
 	Max     int //Maximum amount of pagination entries
 	Pos     int //Position of active page
 	Page    int //Current page
-	Records int //Current results
+	Records int //Current results (optional)
 	Total   int //Total amount of records
 	Size    int //Records per page
 }
 
 const (
+	//ErrPageNo is a string constant used in the error returned by pagination.New() whenever the Page number is invalid.
+	ErrPageNo     = errBase + "Page > Pages"
 	errBase       = "Error in pagination: "
 	errInvSize    = errBase + "Size <= 0"
-	ErrPageNo     = errBase + "Page > Pages"
 	errResultSize = errBase + "Results > Size"
 	errRecordSize = errBase + "Results > Records"
 )
@@ -48,18 +54,17 @@ func (a *Args) check() (err error) {
 	return
 }
 
-// Pagination holds the pagination data. This object can be passed directly to a html/template.
+// Pagination holds the pagination methods. This object can be passed directly to a html/template.
 // The methods defiend on the object can be called directly from the template.
 type Pagination struct {
 	pages int
 	args  *Args
 }
 
-// New takes a pagination.Args struct as argument and returns a pointer to a new Pagination object.
-// It performs some sanity checks on the Args data and return an error if a bogus value is supplied.
-// A specific error message to test for is ErrPageNo, which can be helpfull to return a http.StatusBadRequest to the client
-// For any other error message, something probably went wrong in the code, DB query etc.
-// Most probably you would want to return a http.StatusInternalReverError in such a case.
+// New creates a new pagination object and return a pointer to it. This method performs some sanity checks on the Args data and returns a nil pointer and an error if a bogus value is supplied.
+//
+// See ErrPageNo for invalid page number.
+// For any other error message, something probably went wrong in the calling code, DB query etc.
 func New(a Args) (pag *Pagination, err error) {
 	if err = a.check(); err != nil {
 		return
@@ -81,7 +86,7 @@ func New(a Args) (pag *Pagination, err error) {
 	return
 }
 
-// Prev returns the number of the previous page. It return 0 if there is no previous page.
+// Prev returns the number of the previous page. It returns 0 if there is no previous page.
 func (p *Pagination) Prev() int {
 	if p.args.Page <= 1 {
 		return 0
@@ -94,7 +99,7 @@ func (p *Pagination) Page() int {
 	return p.args.Page
 }
 
-// Next returns the number of the next page. It return 0 if there is no next page.
+// Next returns the number of the next page. It returns 0 if there is no next page.
 func (p *Pagination) Next() int {
 	if p.args.Page == p.pages {
 		return 0
@@ -123,13 +128,13 @@ func (p *Pagination) Pages() int {
 	return p.pages
 }
 
-// Entry represents a page number in the pagination range
+// Entry represents a page number in the pagination range. The active page has the "Active" field set to "true".
 type Entry struct {
-	Active bool // True for the current page, false for any other
+	Active bool // true for the current page, false for any other
 	Number int  // The page number this entry is representing.
 }
 
-// Entries returns a slice of Entry, over which can be ranged in the template.
+// Entries returns a slice of Entry, over which can be ranged inside the template.
 func (p *Pagination) Entries() (r []Entry) {
 	sn := p.args.Page - p.args.Pos //sn is the start page number of the entries range
 	switch {

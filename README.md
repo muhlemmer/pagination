@@ -1,6 +1,6 @@
 ﻿# Pagination
-Pagination is a small Go library for setting up a range with data for use in a html/template. Features:
-* Whenever possible, current page at a fixed offset. So that there is consistent placement among all pages. The offset is shifted at the beginning or end of the page range.
+Pagination is a small Go library for setting up a range with data for use in a *html/template*. Features:
+* Whenever possible, current page at a defined position. So that there is consistent placement among all pages. The offset is shifted at the beginning or end of the page range.
 * Max amount of pages to show, to be sure the pagination fits your template.
 * Convenience of all applicable numbers from the pagination object: no need to access all kind of data structures and arithmetic from inside the template
   * Next, Prev, Current methods.
